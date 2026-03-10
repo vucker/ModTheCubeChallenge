@@ -6,19 +6,17 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     public MeshRenderer Renderer;
-    public float speedColor = 1f;
-    public float speedRotation = 1f;
+    public float speedTimer = 2f;
+    public float speedRotation = 30f;
     private Material material;
     private float timeCooldown = 0f;
     void Start()
     {
         transform.position = new Vector3(5, 12, 2);
-        transform.localScale = Vector3.one * 2.5f;
-
+        transform.localScale = Vector3.one * 1.0f;
         material = Renderer.material;
-        
-        material.color = new Color(0.5f, 0.0f, 0.0f, 0.0f);
-        timeCooldown = Time.time + speedColor;
+
+        timeCooldown = Time.time + speedTimer;
     }
     
     void Update()
@@ -27,37 +25,37 @@ public class Cube : MonoBehaviour
         if (Time.time >= timeCooldown)
         {
             ChangeColor();
-            timeCooldown = Time.time + speedColor;
+            ChangeScale();
+
+            timeCooldown = Time.time + speedTimer;
         }
     }
     private void ChangeColor()
     {
-        float channelRed = 0f, 
-            channelGreen = 0f, 
-            channelBlue = 0f,
-            channelAlpgha = 0f;
-
-        channelRed = RandFloat(channelRed);
-        channelGreen = RandFloat(channelGreen);
-        channelBlue = RandFloat(channelBlue);
-        channelAlpgha = RandFloat(channelAlpgha);
+        float channelRed = RandFloat(),
+            channelGreen = RandFloat(),
+            channelBlue = RandFloat(),
+            channelAlpha = RandFloat();
 
         material.color = new Color(channelRed, 
             channelGreen, 
             channelBlue, 
-            channelAlpgha);
+            channelAlpha);
     }
     private void ChangeRotation()
     {
-        float rotationX = 0f, 
-            rotationY = 0f, 
-            rotationZ = 0f;
-        rotationX = RandFloat(rotationX);
-        rotationY = RandFloat(rotationY);
-        rotationZ = RandFloat(rotationZ);
+        float rotationX = RandFloat(), 
+            rotationY = RandFloat(), 
+            rotationZ = RandFloat();
+
         transform.Rotate(speedRotation * rotationX * Time.deltaTime, 
             speedRotation * rotationY * Time.deltaTime, 
             speedRotation * rotationZ * Time.deltaTime);
     }
-    private float RandFloat(float number) => number = Random.Range(0.0f, 1.0f);
+    private void ChangeScale()
+    {
+        float scaleMultiplier = RandFloat();
+        transform.localScale = Vector3.one * scaleMultiplier * 10;
+    }
+    private float RandFloat() => Random.Range(0.0f, 1.0f);
 }
